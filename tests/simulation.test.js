@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
+import { runExperiment } from '../scripts/evolution-experiment.js';
+
 import {
   addFood,
   createWorld,
@@ -218,4 +220,20 @@ test('fixed-seed environmental experiment is reproducible and records generation
       TRAITS.every(trait => Number.isFinite(record.traitMeans[trait.key]))
     )
   ));
+});
+
+
+test('experiment rejects invalid seeds, generation counts, and environments', () => {
+  assert.throws(
+    () => runExperiment({ generations: 0 }),
+    /generations must be an integer between 1 and 300/
+  );
+  assert.throws(
+    () => runExperiment({ seed: 0 }),
+    /seed must be an integer between 1 and 4294967295/
+  );
+  assert.throws(
+    () => runExperiment({ modes: ['unknown'] }),
+    /modes must contain supported environment mode names/
+  );
 });
