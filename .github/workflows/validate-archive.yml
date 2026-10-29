@@ -1,0 +1,50 @@
+name: Validate source archive
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "project-archive/life-engine.zip"
+      - ".github/workflows/validate-archive.yml"
+  pull_request:
+    paths:
+      - "project-archive/life-engine.zip"
+      - ".github/workflows/validate-archive.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  archive-and-js-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify ZIP integrity
+        run: unzip -t project-archive/life-engine.zip
+
+      - name: Extract source archive
+        run: |
+          mkdir -p /tmp/life-engine-source
+          unzip -q project-archive/life-engine.zip -d /tmp/life-engine-source
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          mapfile -d '' files < <(find /tmp/life-engine-source -type f -name '*.js' -print0)
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "::error::No JavaScript files found in source archive"
+            exit 1
+          fi
+          printf 'Checking %s JavaScript files\n' "${#files[@]}"
+          for file in "${files[@]}"; do
+            echo "Checking: ${file#/tmp/life-engine-source/}"
+            node --check "$file"
+          done
