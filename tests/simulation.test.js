@@ -200,3 +200,22 @@ test('offspring retain parent traits with bounded mutation variation', () => {
   assert.ok(observedOffspring, 'the fixed-seed scenario should produce offspring');
   assert.ok(observedMutation, 'the fixed-seed scenario should expose at least one mutated trait');
 });
+
+
+test('fixed-seed environmental experiment is reproducible and records generations', () => {
+  const options = { seed: 2468, generations: 3, modes: ['balanced', 'scarcity'] };
+  const first = runExperiment(options);
+  const second = runExperiment(options);
+
+  assert.deepEqual(first, second);
+  assert.equal(first.scenarios.length, 2);
+  assert.equal(first.scenarios[0].trajectory.length, 4);
+  assert.equal(first.scenarios[0].trajectory.at(-1).generation, 3);
+  assert.equal(first.scenarios[0].initialPopulation, first.scenarios[1].initialPopulation);
+  assert.ok(first.scenarios.every(scenario =>
+    scenario.trajectory.every(record =>
+      Number.isFinite(record.population) &&
+      TRAITS.every(trait => Number.isFinite(record.traitMeans[trait.key]))
+    )
+  ));
+});
