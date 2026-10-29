@@ -12,7 +12,9 @@ Workflow: `.github/workflows/validate-archive.yml`.
 - целостности сохранённого ZIP через `unzip -t`;
 - `node --check` JavaScript-файлов внутри ZIP.
 
-**Результат актуального CI:** не записан в этом документе, пока запуск не проверен как завершённый. Старый успешный workflow `Validate source archive` (run #40887458943, commit `37d41a6`) проверял архив и его JS, но не текущие отдельные исходники.
+**PASS:** [run #40906387454](https://github.com/Glupozombie/life-engine/actions/runs/40906387454), commit `887325e`, завершён 2026-10-29. Успешно: синтаксис 5 файлов в `js/` и `tests/`; 6/6 тестов (`node --test tests/*.test.js`); проверка ZIP (`unzip -t`); синтаксис 4 JS-файлов внутри ZIP.
+
+Старый запуск `Validate source archive` (run #40887458943, commit `37d41a6`) проверял только архив и его JS.
 
 ## Тесты ядра симуляции
 
