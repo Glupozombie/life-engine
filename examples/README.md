@@ -16,3 +16,6 @@
 - Короткий тестовый мир для воспроизведения ошибки.
 
 Не сохраняй скриншоты или материалы без контекста: всегда поясняй, что из них нужно понять или проверить.
+
+вот что мне нравится по визуалу: <img width="602" height="482" alt="image" src="https://github.com/user-attachments/assets/2024b41c-0820-4e19-8e0d-6bbe4dd398d9" /><img width="888" height="888" alt="image" src="https://github.com/user-attachments/assets/aa207b3d-14d6-4af8-a21b-e24e66ba62e1" />
+
