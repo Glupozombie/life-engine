@@ -219,6 +219,8 @@ function makeHistoryRecord(world) {
     averageAge: meanAge,
     averageEnergy: world.organisms.length ? world.organisms.reduce((sum, o) => sum + o.energy, 0) / world.organisms.length : 0,
     diversity: variance / TRAITS.length,
+    // Snapshot lineage counts so the chronicle can describe real population shifts.
+    speciesPopulations: Object.fromEntries(world.species.map(species => [species.id, species.count || 0])),
     traitMeans
   };
 }
@@ -374,6 +376,34 @@ function updatePopulationSignals(world, previousRecord) {
   if (dominant && dominant.count >= Math.max(12, n * 0.42) && dominant.id !== world.lastDominantSpeciesId) {
     if (world.lastDominantSpeciesId !== null) addEvent(world, 'species', `Линия «${dominant.name}» стала самой многочисленной`, `Сейчас на неё приходится около ${Math.round(dominant.count / Math.max(1, n) * 100)}% живой популяции.`, dominant.id);
     world.lastDominantSpeciesId = dominant.id;
+  }
+
+  // Turn sufficiently large, observed lineage shifts into readable history.
+  // This reports a measured change, not an unproven single cause.
+  const previousLineages = previousRecord?.speciesPopulations;
+  if (previousLineages && world.generation - (world.lastLineageSignalGeneration ?? -10) >= 2) {
+    const shifts = world.species.map(species => {
+      const before = Math.max(0, Number(previousLineages[species.id]) || 0);
+      const after = species.count || 0;
+      return { species, before, after, delta: after - before };
+    }).filter(change => Math.abs(change.delta) >= Math.max(8, change.before * 0.5));
+    shifts.sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+    const shift = shifts[0];
+    if (shift && shift.before > 0 && shift.after > 0) {
+      const growing = shift.delta > 0;
+      const eventName = growing ? 'Линия быстро расширяется' : 'Линия теряет численность';
+      const context = world.worldEvent
+        ? ` Во время этого интервала действовало событие «${world.worldEvent.title}»; это совпадение по времени, а не доказательство единственной причины.`
+        : '';
+      addEvent(
+        world,
+        growing ? 'growth' : 'warning',
+        `${eventName}: «${shift.species.name}»`,
+        `Численность линии изменилась с ${shift.before} до ${shift.after} организмов за поколение.${context}`,
+        shift.species.id
+      );
+      world.lastLineageSignalGeneration = world.generation;
+    }
   }
 }
 
