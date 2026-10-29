@@ -338,6 +338,23 @@ function tryReproduce(world, parent, births) {
   }
 }
 
+function updateWorldEvent(world) {
+  if (world.worldEvent) {
+    world.worldEvent.remainingGenerations--;
+    if (world.worldEvent.remainingGenerations <= 0) {
+      addEvent(world, 'environment', 'Завершилось событие: «' + world.worldEvent.title + '»', 'Условия среды вернулись к обычному режиму. Теперь станет видно, какие линии пережили испытание.');
+      world.worldEvent = null;
+    }
+  }
+  if (!world.worldEvent && world.generation >= 3 && rand(world) < 0.22) {
+    const eventType = pick(world, WORLD_EVENT_TYPES);
+    const minDuration = eventType.duration[0], maxDuration = eventType.duration[1];
+    const duration = Math.floor(rnd(world, minDuration, maxDuration + 1));
+    world.worldEvent = { id: eventType.id, title: eventType.title, remainingGenerations: duration, currentShift: eventType.id === 'currents' ? rnd(world, -0.34, 0.34) : 0 };
+    addEvent(world, 'environment', 'Событие мира: «' + eventType.title + '»', eventType.description + ' Ожидаемая длительность: ' + duration + ' поколения.');
+  }
+}
+
 function updatePopulationSignals(world, previousRecord) {
   const n = world.organisms.length;
   const prev = previousRecord?.population ?? n;
