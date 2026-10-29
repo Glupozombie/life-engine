@@ -386,7 +386,7 @@ function updatePopulationSignals(world, previousRecord) {
       const before = Math.max(0, Number(previousLineages[species.id]) || 0);
       const after = species.count || 0;
       return { species, before, after, delta: after - before };
-    }).filter(change => Math.abs(change.delta) >= Math.max(8, change.before * 0.5));
+    }).filter(change => Math.abs(change.delta) >= Math.max(4, change.before * 0.25));
     shifts.sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
     const shift = shifts[0];
     if (shift && shift.before > 0 && shift.after > 0) {
