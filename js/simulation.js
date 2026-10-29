@@ -23,6 +23,11 @@ const SPECIES_NAMES = [
   'Лазурные плавники', 'Туманные ленты', 'Янтарные спирали', 'Медленные кометы'
 ];
 const TRAIT_BY_KEY = Object.fromEntries(TRAITS.map(t => [t.key, t]));
+const WORLD_EVENT_TYPES = [
+  { id: 'bloom', title: 'Великое цветение', description: 'В воде резко выросло количество питательных веществ. Популяции получают шанс на бурный рост, но за ним может последовать голод.', duration: [2, 4] },
+  { id: 'drought', title: 'Голодная полоса', description: 'Источники пищи почти перестали появляться. Организмы с низкими энергозатратами получают преимущество; численность может резко упасть.', duration: [2, 3] },
+  { id: 'currents', title: 'Смена течений', description: 'Потоки воды изменились и сдвигают обитателей по-другому. Привычные места кормления могут перестать быть выгодными.', duration: [2, 3] }
+];
 const ENVIRONMENTS = {
   balanced: { label: 'Сбалансированная среда', caption: 'Умеренно появляются источники пищи', foodRate: 1, energyMultiplier: 1, current: 0.22 },
   abundance: { label: 'Изобилие пищи', caption: 'Источники энергии появляются чаще', foodRate: 1.75, energyMultiplier: 0.92, current: 0.08 },
