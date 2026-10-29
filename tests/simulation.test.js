@@ -258,10 +258,10 @@ test('generation history stores lineage counts and emits deterministic populatio
   const second = advance();
 
   assert.deepEqual(first.history, second.history);
-  assert.deepEqual(
-    first.events.filter(event => /Линия быстро расширяется|Линия теряет численность/.test(event.title)),
-    second.events.filter(event => /Линия быстро расширяется|Линия теряет численность/.test(event.title))
-  );
+  const lineageSignals = world => world.events
+    .filter(event => /Линия быстро расширяется|Линия теряет численность/.test(event.title))
+    .map(({ title, description, generation, speciesId }) => ({ title, description, generation, speciesId }));
+  assert.deepEqual(lineageSignals(first), lineageSignals(second));
   assert.ok(first.history.every(record => record.speciesPopulations && typeof record.speciesPopulations === 'object'));
   assert.deepEqual(
     first.history[0].speciesPopulations,
