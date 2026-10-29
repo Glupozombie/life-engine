@@ -15,6 +15,7 @@ let world = createWorld();
 let running = false;
 let speed = 1;
 let lastUiUpdate = 0;
+let lastRenderAt = 0;
 let lastChartUpdate = 0;
 let lastEventKey = null;
 let lastFullHistoryKey = null;
@@ -288,10 +289,10 @@ function updateUI(force = false) {
 }
 
 function renderLoop(now) {
-  drawWorld(worldCanvas, world, now / 1000);
-  if (now - lastUiUpdate > 240) {
-    lastUiUpdate = now;
-    updateUI();
+  // Canvas rendering uses many gradients per organism; cap it at 30 FPS instead of redrawing at 60–144 Hz.
+  if (now - lastRenderAt >= 1000 / 30) {
+    lastRenderAt = now;
+    drawWorld(worldCanvas, world, now / 1000);
   }
   animationHandle = requestAnimationFrame(renderLoop);
 }
