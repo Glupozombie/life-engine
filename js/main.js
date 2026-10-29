@@ -14,7 +14,6 @@ const worldCanvas = $('worldCanvas');
 let world = createWorld();
 let running = false;
 let speed = 1;
-let lastUiUpdate = 0;
 let lastRenderAt = 0;
 let lastChartUpdate = 0;
 let lastEventKey = null;
