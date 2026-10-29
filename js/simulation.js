@@ -482,6 +482,7 @@ export function stepWorld(world) {
   if (world.lastPopulationWindow.length > TICKS_PER_GENERATION) world.lastPopulationWindow.shift();
   if (world.tick % TICKS_PER_GENERATION === 0) {
     world.generation++;
+    updateWorldEvent(world);
     refreshSpeciesCounts(world, true);
     const previous = world.history[world.history.length - 1];
     updatePopulationSignals(world, previous);
