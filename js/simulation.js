@@ -23,6 +23,11 @@ const SPECIES_NAMES = [
   'Лазурные плавники', 'Туманные ленты', 'Янтарные спирали', 'Медленные кометы'
 ];
 const TRAIT_BY_KEY = Object.fromEntries(TRAITS.map(t => [t.key, t]));
+const WORLD_EVENT_TYPES = [
+  { id: 'bloom', title: 'Великое цветение', description: 'В воде резко выросло количество питательных веществ. Популяции получают шанс на бурный рост, но за ним может последовать голод.', duration: [2, 4] },
+  { id: 'drought', title: 'Голодная полоса', description: 'Источники пищи почти перестали появляться. Организмы с низкими энергозатратами получают преимущество; численность может резко упасть.', duration: [2, 3] },
+  { id: 'currents', title: 'Смена течений', description: 'Потоки воды изменились и сдвигают обитателей по-другому. Привычные места кормления могут перестать быть выгодными.', duration: [2, 3] }
+];
 const ENVIRONMENTS = {
   balanced: { label: 'Сбалансированная среда', caption: 'Умеренно появляются источники пищи', foodRate: 1, energyMultiplier: 1, current: 0.22 },
   abundance: { label: 'Изобилие пищи', caption: 'Источники энергии появляются чаще', foodRate: 1.75, energyMultiplier: 0.92, current: 0.08 },
@@ -153,6 +158,7 @@ export function createWorld(seed = null) {
     lifetimeTicks: 0,
     lifespans: 0,
     environment: { mode: 'balanced', ...ENVIRONMENTS.balanced },
+    worldEvent: null,
     selectedId: null,
     followSelected: false,
     goals: {},
@@ -332,6 +338,23 @@ function tryReproduce(world, parent, births) {
   }
 }
 
+function updateWorldEvent(world) {
+  if (world.worldEvent) {
+    world.worldEvent.remainingGenerations--;
+    if (world.worldEvent.remainingGenerations <= 0) {
+      addEvent(world, 'environment', 'Завершилось событие: «' + world.worldEvent.title + '»', 'Условия среды вернулись к обычному режиму. Теперь станет видно, какие линии пережили испытание.');
+      world.worldEvent = null;
+    }
+  }
+  if (!world.worldEvent && world.generation >= 3 && rand(world) < 0.22) {
+    const eventType = pick(world, WORLD_EVENT_TYPES);
+    const minDuration = eventType.duration[0], maxDuration = eventType.duration[1];
+    const duration = Math.floor(rnd(world, minDuration, maxDuration + 1));
+    world.worldEvent = { id: eventType.id, title: eventType.title, remainingGenerations: duration, currentShift: eventType.id === 'currents' ? rnd(world, -0.34, 0.34) : 0 };
+    addEvent(world, 'environment', 'Событие мира: «' + eventType.title + '»', eventType.description + ' Ожидаемая длительность: ' + duration + ' поколения.');
+  }
+}
+
 function updatePopulationSignals(world, previousRecord) {
   const n = world.organisms.length;
   const prev = previousRecord?.population ?? n;
@@ -362,8 +385,19 @@ export function stepWorld(world) {
   world.effects = world.effects.filter(effect => effect.createdAt && effect.durationMs ? effectNow - effect.createdAt < effect.durationMs : (effect.life ?? 0) > 0);
   // Older same-version snapshots may contain step-based effect timers; let them expire safely.
   for (const effect of world.effects) { if (!effect.createdAt || !effect.durationMs) { effect.life = (effect.life ?? 1) - 1; if (effect.life <= 0) effect.durationMs = 0; } }
-  const env = ENVIRONMENTS[world.environment?.mode] || ENVIRONMENTS.balanced;
+  const env = { ...(ENVIRONMENTS[world.environment?.mode] || ENVIRONMENTS.balanced) };
   world.environment = { mode: world.environment?.mode || 'balanced', ...env };
+  if (world.worldEvent?.remainingGenerations > 0) {
+    if (world.worldEvent.id === 'bloom') {
+      env.foodRate *= 1.85;
+      env.energyMultiplier *= 0.9;
+    } else if (world.worldEvent.id === 'drought') {
+      env.foodRate *= 0.38;
+      env.energyMultiplier *= 1.22;
+    } else if (world.worldEvent.id === 'currents') {
+      env.current += world.worldEvent.currentShift || 0;
+    }
+  }
 
   const grid = resourceBuckets(world.nutrients);
   const survivors = [];
@@ -448,6 +482,7 @@ export function stepWorld(world) {
   if (world.lastPopulationWindow.length > TICKS_PER_GENERATION) world.lastPopulationWindow.shift();
   if (world.tick % TICKS_PER_GENERATION === 0) {
     world.generation++;
+    updateWorldEvent(world);
     refreshSpeciesCounts(world, true);
     const previous = world.history[world.history.length - 1];
     updatePopulationSignals(world, previous);
@@ -561,6 +596,8 @@ export function restoreWorld(value) {
   for (const effect of world.effects) { if (!Number.isFinite(effect.createdAt) || !Number.isFinite(effect.durationMs)) { effect.createdAt = Date.now(); effect.durationMs = 500; } }
   world.history = Array.isArray(world.history) ? world.history.slice(-320) : [];
   world.goals = world.goals && typeof world.goals === 'object' ? world.goals : {};
+  world.worldEvent = world.worldEvent && typeof world.worldEvent === 'object' ? world.worldEvent : null;
+  if (world.worldEvent && (!Number.isInteger(world.worldEvent.remainingGenerations) || world.worldEvent.remainingGenerations <= 0)) world.worldEvent = null;
   world.lastPopulationWindow = Array.isArray(world.lastPopulationWindow) ? world.lastPopulationWindow.slice(-TICKS_PER_GENERATION) : [];
   const environmentMode = ENVIRONMENTS[world.environment?.mode] ? world.environment.mode : 'balanced';
   world.environment = { mode: environmentMode, ...ENVIRONMENTS[environmentMode] };

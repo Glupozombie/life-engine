@@ -14,7 +14,7 @@ const worldCanvas = $('worldCanvas');
 let world = createWorld();
 let running = false;
 let speed = 1;
-let lastUiUpdate = 0;
+let lastRenderAt = 0;
 let lastChartUpdate = 0;
 let lastEventKey = null;
 let lastFullHistoryKey = null;
@@ -30,7 +30,7 @@ const EVENT_ICONS = {
   system: '◌', species: '✳', mutation: '✧', warning: '!', growth: '↗',
   extinction: '×', environment: '◌', discovery: '☆'
 };
-const EVENT_COLORS = { species: 'species', warning: 'warning', extinction: 'warning', mutation: 'mutation', discovery: 'discovery', growth: 'growth' };
+const EVENT_COLORS = { species: 'species', warning: 'warning', extinction: 'warning', mutation: 'mutation', discovery: 'discovery', growth: 'growth', environment: 'growth' };
 const SPEED_LABELS = { 1: 'Обычная', 5: 'Быстрая', 10: 'Очень быстро', 50: 'Максимум' };
 
 function toast(message, error = false) {
@@ -82,7 +82,10 @@ function updateControlButtons() {
 function updateEnvironmentUI() {
   const env = world.environment || { label: 'Сбалансированная среда', caption: 'Умеренно появляются источники пищи', mode: 'balanced' };
   $('environmentName').textContent = env.label || 'Сбалансированная среда';
-  $('environmentCaption').textContent = env.caption || 'Условия среды';
+  const activeEvent = world.worldEvent;
+  $('environmentCaption').textContent = activeEvent
+    ? `Событие: ${activeEvent.title} · ещё ${activeEvent.remainingGenerations} пок.`
+    : (env.caption || 'Условия среды');
   const short = { balanced: 'Сейчас: баланс', abundance: 'Сейчас: изобилие', scarcity: 'Сейчас: нехватка пищи' };
   $('climateActionCaption').textContent = short[env.mode] || 'Сейчас: баланс';
 }
@@ -145,7 +148,7 @@ function updateEventFeed(force = false) {
   world.events.slice(0, 4).forEach(event => feed.append(buildEventElement(event)));
   if (world.events[0] && world.events[0].id !== lastToastEventId && lastToastEventId !== null) {
     const top = world.events[0];
-    if (['species', 'mutation', 'warning', 'extinction', 'discovery'].includes(top.type)) toast(top.title);
+    if (['species', 'mutation', 'warning', 'extinction', 'discovery', 'environment'].includes(top.type)) toast(top.title);
   }
   lastToastEventId = world.events[0]?.id ?? null;
 }
@@ -288,10 +291,10 @@ function updateUI(force = false) {
 }
 
 function renderLoop(now) {
-  drawWorld(worldCanvas, world, now / 1000);
-  if (now - lastUiUpdate > 240) {
-    lastUiUpdate = now;
-    updateUI();
+  // Canvas rendering uses many gradients per organism; cap it at 30 FPS instead of redrawing at 60–144 Hz.
+  if (now - lastRenderAt >= 1000 / 30) {
+    lastRenderAt = now;
+    drawWorld(worldCanvas, world, now / 1000);
   }
   animationHandle = requestAnimationFrame(renderLoop);
 }

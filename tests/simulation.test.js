@@ -223,6 +223,31 @@ test('fixed-seed environmental experiment is reproducible and records generation
 });
 
 
+
+test('world events are seeded, repeatable, and survive save restoration', () => {
+  const advance = () => {
+    const world = createWorld(314159);
+    for (let tick = 0; tick < 30 * 30; tick++) stepWorld(world);
+    return world;
+  };
+
+  const first = advance();
+  const second = advance();
+  const eventSummary = world => world.events
+    .filter(event => event.title.startsWith('Событие мира:'))
+    .map(event => ({ title: event.title, generation: event.generation, description: event.description }));
+
+  assert.deepEqual(eventSummary(first), eventSummary(second));
+  assert.ok(eventSummary(first).length > 0, 'fixed seed should produce at least one major world event');
+  assert.ok(
+    first.worldEvent === null ||
+    (['bloom', 'drought', 'currents'].includes(first.worldEvent.id) && first.worldEvent.remainingGenerations > 0)
+  );
+
+  const restored = restoreWorld(JSON.parse(JSON.stringify(first)));
+  assert.deepEqual(restored.worldEvent, first.worldEvent);
+});
+
 test('experiment rejects invalid seeds, generation counts, and environments', () => {
   assert.throws(
     () => runExperiment({ generations: 0 }),
