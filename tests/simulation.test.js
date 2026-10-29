@@ -8,8 +8,40 @@ import {
   MAX_NUTRIENTS,
   MAX_POPULATION,
   restoreWorld,
-  stepWorld
+  stepWorld,
+  TRAITS
 } from '../js/simulation.js';
+
+function isolateOneOrganism(world, overrides = {}) {
+  const organism = world.organisms[0];
+  world.organisms = [organism];
+  organism.genes = {
+    mobility: 0.25,
+    perception: 0.5,
+    efficiency: 0.5,
+    fertility: 0.1,
+    shell: 0.2,
+    filaments: 0.1,
+    ...overrides
+  };
+  organism.x = 600;
+  organism.y = 350;
+  organism.angle = 0;
+  organism.age = 0;
+  organism.energy = 0.7;
+  organism.trail = [];
+  world.nutrients = [];
+  return organism;
+}
+
+function energyAfterOneTick({ seed = 123, genes = {}, environment = 'balanced' } = {}) {
+  const world = createWorld(seed);
+  const organism = isolateOneOrganism(world, genes);
+  world.environment = { mode: environment };
+  const before = organism.energy;
+  stepWorld(world);
+  return { before, after: world.organisms[0].energy };
+}
 
 test('createWorld creates the expected initial ecosystem', () => {
   const world = createWorld(12345);
@@ -80,4 +112,91 @@ test('restoreWorld rejects incompatible save data', () => {
     () => restoreWorld({ version: -1, organisms: [], nutrients: [], species: [] }),
     /совместимым сохранением LIFE ENGINE/
   );
+});
+
+test('higher efficiency lowers energy consumption under identical conditions', () => {
+  const inefficient = energyAfterOneTick({ genes: { efficiency: 0.1 } });
+  const efficient = energyAfterOneTick({ genes: { efficiency: 0.9 } });
+
+  assert.ok(inefficient.before - inefficient.after > efficient.before - efficient.after);
+});
+
+test('higher mobility has an energy cost under identical conditions', () => {
+  const slow = energyAfterOneTick({ genes: { mobility: 0.1 } });
+  const fast = energyAfterOneTick({ genes: { mobility: 0.9 } });
+
+  assert.ok(fast.before - fast.after > slow.before - slow.after);
+});
+
+test('scarcity mode increases energy loss compared with balanced conditions', () => {
+  const balanced = energyAfterOneTick({ environment: 'balanced' });
+  const scarcity = energyAfterOneTick({ environment: 'scarcity' });
+
+  assert.ok(scarcity.before - scarcity.after > balanced.before - balanced.after);
+});
+
+test('finding food restores more energy than the organism spends on that tick', () => {
+  const world = createWorld(2026);
+  const organism = isolateOneOrganism(world, {
+    mobility: 0.2,
+    perception: 1,
+    efficiency: 0.5,
+    fertility: 0.1,
+    shell: 0.2,
+    filaments: 0.5
+  });
+  organism.energy = 0.2;
+  world.nutrients = [{
+    id: 999999,
+    x: organism.x,
+    y: organism.y,
+    energy: 0.3,
+    radius: 4,
+    hue: 46,
+    pulse: 0,
+    eaten: false
+  }];
+
+  stepWorld(world);
+
+  assert.equal(world.totalMeals, 1);
+  assert.ok(world.organisms[0].energy > 0.2);
+  assert.ok(!world.nutrients.some(food => food.id === 999999));
+});
+
+test('offspring retain parent traits with bounded mutation variation', () => {
+  const world = createWorld(12345);
+  let observedOffspring = false;
+  let observedMutation = false;
+
+  for (let iteration = 0; iteration < 120 && !observedMutation; iteration++) {
+    const parentGenesBeforeStep = new Map(
+      world.organisms.map(organism => [organism.id, { ...organism.genes }])
+    );
+
+    stepWorld(world);
+
+    for (const child of world.organisms) {
+      if (child.parentId === null || child.birthTick !== world.tick) continue;
+      const parentGenes = parentGenesBeforeStep.get(child.parentId);
+      if (!parentGenes) continue;
+
+      observedOffspring = true;
+      let changedTrait = false;
+
+      for (const trait of TRAITS) {
+        const difference = Math.abs(child.genes[trait.key] - parentGenes[trait.key]);
+        assert.ok(
+          difference <= 0.320000001,
+          `Mutation for ${trait.key} exceeded its configured maximum: ${difference}`
+        );
+        if (difference > 1e-8) changedTrait = true;
+      }
+
+      if (changedTrait) observedMutation = true;
+    }
+  }
+
+  assert.ok(observedOffspring, 'the fixed-seed scenario should produce offspring');
+  assert.ok(observedMutation, 'the fixed-seed scenario should expose at least one mutated trait');
 });
