@@ -368,8 +368,19 @@ export function stepWorld(world) {
   world.effects = world.effects.filter(effect => effect.createdAt && effect.durationMs ? effectNow - effect.createdAt < effect.durationMs : (effect.life ?? 0) > 0);
   // Older same-version snapshots may contain step-based effect timers; let them expire safely.
   for (const effect of world.effects) { if (!effect.createdAt || !effect.durationMs) { effect.life = (effect.life ?? 1) - 1; if (effect.life <= 0) effect.durationMs = 0; } }
-  const env = ENVIRONMENTS[world.environment?.mode] || ENVIRONMENTS.balanced;
+  const env = { ...(ENVIRONMENTS[world.environment?.mode] || ENVIRONMENTS.balanced) };
   world.environment = { mode: world.environment?.mode || 'balanced', ...env };
+  if (world.worldEvent?.remainingGenerations > 0) {
+    if (world.worldEvent.id === 'bloom') {
+      env.foodRate *= 1.85;
+      env.energyMultiplier *= 0.9;
+    } else if (world.worldEvent.id === 'drought') {
+      env.foodRate *= 0.38;
+      env.energyMultiplier *= 1.22;
+    } else if (world.worldEvent.id === 'currents') {
+      env.current += world.worldEvent.currentShift || 0;
+    }
+  }
 
   const grid = resourceBuckets(world.nutrients);
   const survivors = [];
