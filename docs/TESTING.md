@@ -13,7 +13,7 @@ Workflow: `.github/workflows/validate-archive.yml`.
 - целостность контрольного ZIP через `unzip -t`;
 - `node --check` JavaScript-файлов внутри ZIP.
 
-**PASS:** [GitHub Actions run #40915787041](https://github.com/Glupozombie/life-engine/actions/runs/40915787041), 2026-10-29. На Node.js v22.23.4 прошли синтаксическая проверка 6 файлов JS, **15/15 тестов**, сценарий сравнения сред, целостность ZIP и синтаксис всех 4 архивных JS-файлов. Новый тест хроники проходит на фиксированном seed за 80 поколений. Предыдущий расширенный baseline — [run #40910384996](https://github.com/Glupozombie/life-engine/actions/runs/40910384996), 13/13 тестов.
+**Базовый PASS основной симуляции:** [GitHub Actions run #40915787041](https://github.com/Glupozombie/life-engine/actions/runs/40915787041), 2026-10-29. На Node.js v22.23.4 прошли синтаксическая проверка 6 файлов JS, **15/15 тестов**, сценарий сравнения сред, целостность ZIP и синтаксис всех 4 архивных JS-файлов. Новый тест хроники проходит на фиксированном seed за 80 поколений. Предыдущий расширенный baseline — [run #40910384996](https://github.com/Glupozombie/life-engine/actions/runs/40910384996), 13/13 тестов.
 
 Предыдущий baseline — [run #40906387454](https://github.com/Glupozombie/life-engine/actions/runs/40906387454), который прошёл до добавления расширенных сценариев (6/6 тестов).
 
@@ -88,9 +88,9 @@ node scripts/evolution-experiment.js --seed=12345 --generations=12
 Наблюдения и ошибки:
 
 
-## Прототип «Экспедиция» — ожидает проверки
+## Прототип «Экспедиция» — автоматический CI PASS, браузер ожидает проверки
 
-Добавлены `expedition.html`, `css/expedition.css`, `js/expedition.js`. Режим содержит 48 агентов, пять контрольных проходов, датчики препятствий, fitness по пройденным проходам/прогрессу/столкновениям и эволюционный отбор геномов. Workflow должен выполнить `node --check` для нового `js/expedition.js` вместе с остальными JS-файлами.
+Добавлены `expedition.html`, `css/expedition.css`, `js/expedition.js`. Режим содержит 48 агентов, пять контрольных проходов, датчики препятствий, fitness по пройденным проходам/прогрессу/столкновениям и эволюционный отбор геномов. **PASS:** [GitHub Actions run #40916928821](https://github.com/Glupozombie/life-engine/actions/runs/40916928821) — `node --check` для всех tracked JS, все тесты старой симуляции, эксперимент и проверки ZIP прошли.
 
 - [ ] CI на ветке с прототипом проходит.
 - [ ] Открыть `http://localhost:8000/expedition.html` через локальный сервер.
