@@ -158,6 +158,7 @@ export function createWorld(seed = null) {
     lifetimeTicks: 0,
     lifespans: 0,
     environment: { mode: 'balanced', ...ENVIRONMENTS.balanced },
+    worldEvent: null,
     selectedId: null,
     followSelected: false,
     goals: {},
