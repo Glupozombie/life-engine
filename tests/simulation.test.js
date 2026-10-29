@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
+import { runExperiment } from '../scripts/evolution-experiment.js';
+
 import {
   addFood,
   createWorld,
