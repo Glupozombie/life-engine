@@ -248,6 +248,31 @@ test('world events are seeded, repeatable, and survive save restoration', () => 
   assert.deepEqual(restored.worldEvent, first.worldEvent);
 });
 
+test('generation history stores lineage counts and emits deterministic population-shift records', () => {
+  const advance = () => {
+    const world = createWorld(7654321);
+    for (let tick = 0; tick < 30 * 80; tick++) stepWorld(world);
+    return world;
+  };
+  const first = advance();
+  const second = advance();
+
+  assert.deepEqual(first.history, second.history);
+  assert.deepEqual(
+    first.events.filter(event => /Линия быстро расширяется|Линия теряет численность/.test(event.title)),
+    second.events.filter(event => /Линия быстро расширяется|Линия теряет численность/.test(event.title))
+  );
+  assert.ok(first.history.every(record => record.speciesPopulations && typeof record.speciesPopulations === 'object'));
+  assert.deepEqual(
+    first.history[0].speciesPopulations,
+    Object.fromEntries(first.species.map(species => [species.id, 24]))
+  );
+  assert.ok(
+    first.events.some(event => /Линия быстро расширяется|Линия теряет численность/.test(event.title)),
+    'long deterministic run should record at least one substantial lineage shift'
+  );
+});
+
 test('experiment rejects invalid seeds, generation counts, and environments', () => {
   assert.throws(
     () => runExperiment({ generations: 0 }),
