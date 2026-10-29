@@ -6,11 +6,11 @@
 
 - **Дата:** 2026-10-29
 - **Ветка:** `main`
-- **Последний кодовый checkpoint:** [`960833d`](https://github.com/Glupozombie/life-engine/commit/960833d63794cd762341b2800bc7d70c43d6ef19) — PR #2 merged; current expanded test suite is on main.
+- **Последний кодовый checkpoint:** [`960833d`](https://github.com/Glupozombie/life-engine/commit/960833d63794cd762341b2800bc7d70c43d6ef19) — PR #2 влит; расширенный набор тестов находится в main.
 - **Последний документный коммит перед этой записью:** [`2fe86a5`](https://github.com/Glupozombie/life-engine/commit/2fe86a5d1491af1ec1445ff6704c53a389118f2e).
-- **CI:** [run #40910384996](https://github.com/Glupozombie/life-engine/actions/runs/40910384996) — **SUCCESS**, 13/13 tests passed; experiment and archive checks also passed.
-- **Эксперимент:** `scripts/evolution-experiment.js` compares the same seed in `balanced`, `abundance`, and `scarcity`; a 12-generation report is documented in `docs/TESTING.md`.
-- **Браузерный статус:** пользователь сообщил, что игра работает и заметных багов не обнаружил. Независимый browser E2E, IndexedDB after reload, import/export and FPS are still not verified.
+- **CI:** [run #40910384996](https://github.com/Glupozombie/life-engine/actions/runs/40910384996) — **SUCCESS**: 13/13 тестов пройдены; эксперимент и проверки архива также прошли.
+- **Эксперимент:** `scripts/evolution-experiment.js` сравнивает одинаковое начальное состояние при одном seed в режимах `balanced`, `abundance` и `scarcity`; отчёт за 12 поколений записан в `docs/TESTING.md`.
+- **Браузерный статус:** пользователь сообщил, что игра работает и заметных багов не обнаружил. Независимый E2E-тест в браузере, сохранение IndexedDB после перезагрузки, импорт/экспорт и FPS пока не проверены.
 
 ## Подтверждено
 
@@ -19,7 +19,7 @@
 - [x] `project-archive/life-engine.zip` сохранён как контрольная копия.
 - [x] `tests/simulation.test.js` содержит 13 проверок: шесть базовых проверок, причинные связи энергозатрат/пищи, наследование/границы мутаций, повторяемость эксперимента и валидацию параметров.
 - [x] Обновлён `.github/workflows/validate-archive.yml`: проверки запускаются на изменениях реальных исходников/тестов и проверяют как текущий код, так и архив.
-- [x] CI run #40910384996: все 6 JS-файлов в `js/`, `tests/` и `scripts/` прошли `node --check`; тесты — 13/13 PASS; 12-generation experiment PASS; `unzip -t` прошёл; 4 JS-файла из архива прошли `node --check`.
+- [x] CI run #40910384996: все 6 JS-файлов в `js/`, `tests/` и `scripts/` прошли `node --check`; тесты — 13/13 PASS; эксперимент на 12 поколений прошёл; `unzip -t` прошёл; 4 JS-файла из архива прошли `node --check`.
 - [x] Синхронизированы `docs/CURRENT_STATE.md`, `docs/TESTING.md`, `docs/ROADMAP.md`, `docs/CHANGELOG.md`.
 - [x] Issue #1 переименован и обновлён: осталось провести браузерную проверку.
 
@@ -54,11 +54,11 @@
 
 
 ### 2026-10-29 16:20 UTC — Причинные сценарии и эксперимент среды
-- Статус: DONE (автоматические проверки и эксперимент) / NOT TESTED (независимый браузерный E2E).
+- Статус: ЗАВЕРШЕНО (автоматические проверки и эксперимент) / НЕ ПРОВЕРЕНО (независимый браузерный E2E).
 - Изменено: добавлен `scripts/evolution-experiment.js`; расширен `tests/simulation.test.js` до 13 тестов; workflow проверяет `scripts/` и запускает 12 поколений по трём средам; обновлены `docs/TESTING.md`, `docs/CURRENT_STATE.md`, `docs/ROADMAP.md`, `docs/CHANGELOG.md`.
-- Проверено: PR #2 успешно проверен run #40910384996: 13/13 тестов, эксперимент, синтаксис исходников, целостность ZIP и синтаксис JS в ZIP — PASS. Первый прогон #40910298277 упал из-за отсутствующего импорта `runExperiment`; импорт добавлен, повторный прогон успешен. PR #2 смёржен в main как `960833d`.
+- Проверено: PR #2 успешно проверен run #40910384996: 13/13 тестов, эксперимент, синтаксис исходников, целостность ZIP и синтаксис JS в ZIP — успешно. Первый прогон #40910298277 упал из-за отсутствующего импорта `runExperiment`; импорт добавлен, повторный прогон успешен. PR #2 смёржен в main как `960833d`.
 - Результат сценария: при seed 12345 за 12 поколений популяция 72→126 в balanced, 72→175 в abundance, 72→75 в scarcity; подробные числа и ограничения интерпретации записаны в `docs/TESTING.md`.
-- Не проверено: реальный браузерный E2E, IndexedDB после перезагрузки, импорт/экспорт, мобильная/узкая раскладка, FPS и длительная память.
+- Не проверено: независимый E2E-тест в браузере, IndexedDB после перезагрузки, импорт/экспорт, мобильная/узкая раскладка, FPS и длительная память.
 - Следующий шаг: сравнить несколько seed и больший горизонт; проверить цену размножения и причинность журнала.
 
 ## Формат новых записей
