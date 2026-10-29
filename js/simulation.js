@@ -596,6 +596,8 @@ export function restoreWorld(value) {
   for (const effect of world.effects) { if (!Number.isFinite(effect.createdAt) || !Number.isFinite(effect.durationMs)) { effect.createdAt = Date.now(); effect.durationMs = 500; } }
   world.history = Array.isArray(world.history) ? world.history.slice(-320) : [];
   world.goals = world.goals && typeof world.goals === 'object' ? world.goals : {};
+  world.worldEvent = world.worldEvent && typeof world.worldEvent === 'object' ? world.worldEvent : null;
+  if (world.worldEvent && (!Number.isInteger(world.worldEvent.remainingGenerations) || world.worldEvent.remainingGenerations <= 0)) world.worldEvent = null;
   world.lastPopulationWindow = Array.isArray(world.lastPopulationWindow) ? world.lastPopulationWindow.slice(-TICKS_PER_GENERATION) : [];
   const environmentMode = ENVIRONMENTS[world.environment?.mode] ? world.environment.mode : 'balanced';
   world.environment = { mode: environmentMode, ...ENVIRONMENTS[environmentMode] };
