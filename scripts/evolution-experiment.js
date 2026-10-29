@@ -33,11 +33,11 @@ export function runExperiment({
   generations = 30,
   modes = EXPERIMENT_MODES
 } = {}) {
-  if (!Number.isInteger(generations) || generations < 1 || generations > 500) {
-    throw new RangeError('generations must be an integer between 1 and 500');
+  if (!Number.isInteger(generations) || generations < 1 || generations > 300) {
+    throw new RangeError('generations must be an integer between 1 and 300');
   }
-  if (!Number.isInteger(seed) || seed < 0 || seed > 0xFFFFFFFF) {
-    throw new RangeError('seed must be an unsigned 32-bit integer');
+  if (!Number.isInteger(seed) || seed < 1 || seed > 0xFFFFFFFF) {
+    throw new RangeError('seed must be an integer between 1 and 4294967295');
   }
   if (!Array.isArray(modes) || modes.length === 0 ||
       modes.some(mode => !EXPERIMENT_MODES.includes(mode))) {
