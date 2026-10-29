@@ -265,7 +265,7 @@ test('generation history stores lineage counts and emits deterministic populatio
   assert.ok(first.history.every(record => record.speciesPopulations && typeof record.speciesPopulations === 'object'));
   assert.deepEqual(
     first.history[0].speciesPopulations,
-    Object.fromEntries(first.species.map(species => [species.id, 24]))
+    { 1: 24, 2: 24, 3: 24 }
   );
   assert.ok(
     first.events.some(event => /Линия быстро расширяется|Линия теряет численность/.test(event.title)),
