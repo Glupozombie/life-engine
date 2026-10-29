@@ -1,0 +1,7 @@
+{
+  "name": "life-engine",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A local browser sandbox for fictional artificial life and evolution"
+}
