@@ -18,6 +18,7 @@ on:
       - "css/**"
       - "js/**"
       - "tests/**"
+      - "scripts/**"
       - "package.json"
       - "project-archive/life-engine.zip"
       - ".github/workflows/validate-archive.yml"
@@ -55,6 +56,9 @@ jobs:
 
       - name: Run simulation tests
         run: node --test tests/*.test.js
+
+      - name: Run reproducible environmental experiment
+        run: node scripts/evolution-experiment.js --generations=12
 
       - name: Verify retained ZIP integrity
         run: unzip -t project-archive/life-engine.zip
