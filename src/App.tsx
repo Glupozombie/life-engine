@@ -16,7 +16,7 @@ function drawBody(canvas:HTMLCanvasElement,s:Snapshot|null){
   const ground=h*.82;c.strokeStyle="#60758a";c.lineWidth=2;c.beginPath();c.moveTo(0,ground);c.lineTo(w,ground);c.stroke();
   if(!s?.body?.points){c.fillStyle="#9aabba";c.textAlign="center";c.font="13px Inter,sans-serif";c.fillText("Ожидание физической симуляции",w/2,h/2);c.font="11px Inter,sans-serif";c.fillStyle="#60758a";c.fillText("Запусти обучение — здесь появится тело",w/2,h/2+23);return;}
   const p=s.body.points,scale=Math.min(w/3.6,h/1.9),px=(v:[number,number]):[number,number]=>[w/2+(v[0]-s.body!.root_x)*scale,ground-v[1]*scale];
-  const links:[string,string][]=[["pelvis","torso"],["torso","head"],["pelvis","left_thigh"],["left_thigh","left_shin"],["left_shin","left_foot"],["pelvis","right_thigh"],["right_thigh","right_shin"],["right_shin","right_foot"]];
+  const links:[string,string][]=[["pelvis","torso"],["torso","head"],["pelvis","left_thigh"],["left_thigh","left_shin"],["left_shin","left_foot"],["pelvis","right_thigh"],["right_thigh","right_shin"],["right_shin","right_foot"],["torso","left_upper_arm"],["left_upper_arm","left_forearm"],["left_forearm","left_hand"],["torso","right_upper_arm"],["right_upper_arm","right_forearm"],["right_forearm","right_hand"]];
   c.lineCap="round";c.lineJoin="round";
   for(const [a,b] of links){if(!p[a]||!p[b])continue;const a1=px(p[a]),b1=px(p[b]);c.strokeStyle=a.includes("left")?"#63d9cf":"#86a9f7";c.lineWidth=a==="pelvis"||a==="torso"?13:9;c.beginPath();c.moveTo(a1[0],a1[1]);c.lineTo(b1[0],b1[1]);c.stroke();}
   for(const [name,v] of Object.entries(p)){const q=px(v);c.fillStyle=name.includes("left")?"#b2fff0":name.includes("right")?"#c5d5ff":"#f2f7fb";c.beginPath();c.arc(q[0],q[1],name==="head"?10:5,0,Math.PI*2);c.fill();}
