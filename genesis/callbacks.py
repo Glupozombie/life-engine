@@ -29,6 +29,7 @@ class BrainTelemetryCallback(BaseCallback):
             "step": int(self.num_timesteps),
             "brain": brain,
             "observation": observations[0].astype(float).tolist(),
+            "action_applied": self.locals.get("actions", [[0]])[0].astype(float).tolist(),
             "body": body,
             "metrics": {
                 "episode_reward": float(self.locals.get("rewards", [0])[0]),
