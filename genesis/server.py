@@ -81,9 +81,9 @@ def start_training(request: TrainRequest):
         except Exception as exc:
             publish_snapshot({"status": "error", "error": str(exc), "step": 0, "brain": None, "body": None})
 
+    publish_snapshot({"status": "starting", "step": 0, "brain": None, "body": None})
     _training_thread = threading.Thread(target=worker, daemon=True)
     _training_thread.start()
-    publish_snapshot({"status": "starting", "step": 0, "brain": None, "body": None})
     return {"started": True, "task": request.task, "total_timesteps": request.total_timesteps}
 
 
