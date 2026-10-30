@@ -56,12 +56,11 @@ def start_training(request: TrainRequest):
         from pathlib import Path
         from stable_baselines3 import PPO
         from stable_baselines3.common.env_util import make_vec_env
-        from stable_baselines3.common.monitor import Monitor
         from genesis.callbacks import BrainTelemetryCallback
         from genesis.env import GenesisBipedEnv
 
         try:
-            env = make_vec_env(lambda: Monitor(GenesisBipedEnv(task=request.task)), n_envs=request.n_envs, seed=42)
+            env = make_vec_env(lambda: GenesisBipedEnv(task=request.task), n_envs=request.n_envs, seed=42)
             model = PPO(
                 "MlpPolicy", env, learning_rate=3e-4, n_steps=1024, batch_size=256,
                 gamma=0.99, gae_lambda=0.95, clip_range=0.2, ent_coef=0.005,
