@@ -13,7 +13,8 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
-      - run: pip install -r requirements.txt
+      - run: pip install mujoco gymnasium numpy pytest
+      - run: python -m compileall -q genesis
       - run: pytest
   frontend:
     runs-on: ubuntu-latest
