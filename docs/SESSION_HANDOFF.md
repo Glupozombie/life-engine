@@ -49,6 +49,9 @@ npm run env | Select-String "PATH="
 - Точная причина не найдена. Не утверждать, что виновато расширение, пока нет доказательств.
 - Следующий шаг: запросить полный список красных ошибок Console и Network для `/src/main.tsx`, `/src/App.tsx`, CSS. Проверить HTTP responses и локальную ветку/checkout.
 
+## Очистка GitHub, выполненная при передаче
+Удалены артефакты прежней JS-версии LIFE ENGINE, которые не используются GENESIS: `project-archive/life-engine.zip`, `project-archive/README.md`, `scripts/evolution-experiment.js`, `tests/simulation.test.js`, `tests/creature-world.test.js`, `.github/workflows/validate-archive.yml`. История Git осталась. Активный тестовый набор теперь содержит `tests/test_env.py`; актуальный CI — `.github/workflows/ci.yml`.
+
 ## Текущий статус
 - TypeScript typecheck: PASS при прямом запуске.
 - Vite production build: PASS при прямом запуске.
