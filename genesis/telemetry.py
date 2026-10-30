@@ -13,7 +13,7 @@ def extract_policy_telemetry(model: Any, observation: np.ndarray, include_weight
     obs_tensor, _ = policy.obs_to_tensor(np.asarray(observation, dtype=np.float32))
     with torch.no_grad():
         features = policy.extract_features(obs_tensor)
-        x = policy.mlp_extractor.forward_actor(features)
+        x = features
         activations: list[list[float]] = []
         layers: list[dict[str, Any]] = []
         for module in policy.mlp_extractor.policy_net:
