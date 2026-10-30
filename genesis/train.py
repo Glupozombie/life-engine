@@ -5,7 +5,6 @@ from pathlib import Path
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_util import make_vec_env
-from stable_baselines3.common.monitor import Monitor
 
 from genesis.callbacks import BrainTelemetryCallback
 from genesis.env import GenesisBipedEnv
@@ -19,7 +18,7 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("checkpoints"))
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
-    env = make_vec_env(lambda: Monitor(GenesisBipedEnv(task=args.task)), n_envs=args.envs, seed=42)
+    env = make_vec_env(lambda: GenesisBipedEnv(task=args.task), n_envs=args.envs, seed=42)
     model = PPO(
         "MlpPolicy", env, learning_rate=3e-4, n_steps=1024, batch_size=256,
         gamma=0.99, gae_lambda=0.95, clip_range=0.2, ent_coef=0.005,
