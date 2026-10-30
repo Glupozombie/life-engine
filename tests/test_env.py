@@ -8,7 +8,7 @@ def test_environment_observation_and_action_shapes():
     obs, info = env.reset(seed=7)
     assert obs.shape == env.observation_space.shape
     assert obs.dtype == np.float32
-    next_obs, reward, terminated, truncated, info = env.step(np.zeros(7, dtype=np.float32))
+    next_obs, reward, terminated, truncated, info = env.step(np.zeros(11, dtype=np.float32))
     assert next_obs.shape == obs.shape
     assert np.isfinite(reward)
     assert isinstance(terminated, bool)
