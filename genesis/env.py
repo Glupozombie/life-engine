@@ -89,7 +89,7 @@ class GenesisBipedEnv(gym.Env[np.ndarray, np.ndarray]):
         self.previous_x = root_x
         control_cost = float(np.square(action).mean())
         angular_cost = float(np.square(self.data.qvel[2:]).mean())
-        fallen = bool(self.data.qpos[1] < -0.1 or upright < 0.15)
+        fallen = bool(self.data.qpos[1] < -0.35 or (upright < -0.25 and self.steps > 40))
 
         upright_reward = max(0.0, upright)
         if self.task == "stand":
