@@ -183,6 +183,8 @@ pytest
 - PR #7 — переход от прежнего LIFE ENGINE к GENESIS, squash-merged в `main`; SHA, записанный в истории проекта: `033fc20494be8804c52f51ded830b0c618751533`.
 - PR #8 — добавлена инструкция установки `docs/INSTALL.md`, squash-merged в `main`; SHA: `06f56506d9ba274fe17fb21d0349e3010f630345`.
 - На текущем дереве `main` есть физическая модель, Gymnasium env, PPO training, FastAPI/WebSocket, React UI, CI и документация.
+- При очистке удалены устаревшие артефакты прежнего LIFE ENGINE: `project-archive/life-engine.zip`, `project-archive/README.md`, `scripts/evolution-experiment.js`, `tests/simulation.test.js`, `tests/creature-world.test.js` и `.github/workflows/validate-archive.yml`. Они относились к старой JS-симуляции и больше не соответствовали GENESIS. История Git сохранена.
+- Старые provider-specific start prompts оставлены как короткие ссылки на единый `docs/UNIVERSAL_START_PROMPT.md`, чтобы не плодить расходящиеся копии.
 - PR #5 и #6 относятся к старому продукту LIFE ENGINE/экосистеме и не должны считаться текущим функционалом GENESIS.
 
 ## 8. Что ещё не доказано / не реализовано
