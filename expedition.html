@@ -1,60 +1,21 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07111e">
-  <title>LIFE ENGINE — Экспедиция</title>
-  <link rel="stylesheet" href="./css/expedition.css">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07111e">
+<title>LIFE ENGINE — Живая экосистема</title><link rel="stylesheet" href="./css/expedition.css">
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="./index.html"><span class="brand-mark">✳</span><span><b>LIFE ENGINE</b><small>ЭКСПЕДИЦИЯ · ЭВОЛЮЦИЯ ПОВЕДЕНИЯ</small></span></a>
-    <div class="top-status"><i id="statusDot"></i><span id="statusText">ГОТОВ К ЗАПУСКУ</span></div>
-    <a class="back-link" href="./index.html">Старая экосистема ↗</a>
-  </header>
-  <main class="layout">
-    <section class="main-column">
-      <div class="intro">
-        <p class="eyebrow">ЭКСПЕРИМЕНТ № 01</p>
-        <h1>Найди путь к новому миру</h1>
-        <p>Пять проходов. Одна экспедиция. Каждое поколение наследует стратегии тех, кто продвинулся дальше.</p>
-      </div>
-      <section class="stage">
-        <div class="stage-head"><span><i class="live-dot"></i><b>ПОЛЕ ЭКСПЕДИЦИИ</b></span><span id="stageLabel">ПОКОЛЕНИЕ 1</span></div>
-        <canvas id="world" width="1200" height="700" aria-label="Симуляция существ, проходящих через препятствия к выходу"></canvas>
-        <div class="stage-foot"><span><i class="legend-creature"></i>Экспедиция</span><span><i class="legend-trail"></i>След движения</span><span><i class="legend-gate"></i>Контрольные проходы</span><span><i class="legend-exit"></i>Цель</span></div>
-      </section>
-      <section class="progress-panel">
-        <div class="progress-title"><div><p class="eyebrow">ЛУЧШИЙ РЕЗУЛЬТАТ</p><h2 id="championTitle">Пока никто не прошёл</h2></div><strong id="progressValue">0 / 5</strong></div>
-        <div class="progress-track"><i id="progressBar"></i></div>
-        <p id="progressDescription">Запусти экспедицию: существа будут учиться на результатах предыдущих поколений.</p>
-      </section>
-    </section>
-    <aside class="sidebar">
-      <section class="panel controls">
-        <p class="eyebrow">УПРАВЛЕНИЕ</p><h2>Запусти эволюцию</h2>
-        <button id="runBtn" class="primary">▶ Запустить</button>
-        <div class="button-row"><button id="stepBtn" class="secondary">Следующее поколение ↗</button><button id="resetBtn" class="secondary">Новый мир ↻</button></div>
-        <label class="setting-label" for="speed">Скорость симуляции <b id="speedLabel">×2</b></label>
-        <input id="speed" type="range" min="1" max="8" value="2">
-        <p class="hint">Ускорение считает больше шагов за кадр. Отрисовка остаётся плавной.</p>
-      </section>
-      <section class="panel stats">
-        <p class="eyebrow">СЕЙЧАС</p><div class="stat-grid">
-          <div><small>Поколение</small><b id="generation">1</b></div><div><small>Активны</small><b id="alive">48</b></div>
-          <div><small>Проходов открыто</small><b id="gates">0 / 5</b></div><div><small>Лучший путь</small><b id="distance">0%</b></div>
-        </div>
-      </section>
-      <section class="panel champion">
-        <p class="eyebrow">ЛУЧШИЙ ИССЛЕДОВАТЕЛЬ</p><div class="champion-avatar" id="championAvatar">✧</div>
-        <h2 id="championName">Исследователь № 01</h2><p id="championInfo">Пока собираем первые результаты.</p>
-        <div class="gene-list" id="genes"></div>
-      </section>
-      <section class="panel log-panel"><div class="panel-title"><div><p class="eyebrow">ХРОНИКА</p><h2>Что изменилось</h2></div></div><div id="log" class="log"><p class="muted">Здесь появятся результаты экспедиции.</p></div></section>
-      <p class="disclaimer">Это экспериментальный игровой режим. Признаки наследуются и мутируют в рамках упрощённой модели; это не научная модель биологии.</p>
-    </aside>
-  </main>
-  <script type="module" src="./js/expedition.js"></script>
-</body>
-</html>
+<header class="topbar"><a class="brand" href="./index.html"><span class="brand-mark">✳</span><span><b>LIFE ENGINE</b><small>АВТОНОМНАЯ ЭКОСИСТЕМА</small></span></a><div class="top-status"><i id="statusDot"></i><span id="statusText">МИР ОЖИДАЕТ</span></div><a class="back-link" href="./index.html">Старая версия ↗</a></header>
+<main class="layout">
+<section class="main-column">
+ <div class="intro"><p class="eyebrow">ЖИВОЙ МИР · ЭКСПЕРИМЕНТ 01</p><h1>Жизнь найдёт свой путь</h1><p>Существа самостоятельно ищут пищу, избегают угроз, охотятся и оставляют потомство. У каждого — собственный набор наследуемых инстинктов.</p></div>
+ <section class="stage"><div class="stage-head"><span><i class="live-dot"></i><b>ЭКОСИСТЕМА</b></span><span id="stageLabel">ПОКОЛЕНИЕ 1</span></div><canvas id="world" width="1200" height="700" aria-label="Автономная симуляция живых существ"></canvas><div class="stage-foot"><span><i class="legend-creature"></i>Собиратели</span><span><i class="legend-hunter"></i>Хищники</span><span><i class="legend-food"></i>Пища</span><span><i class="legend-trail"></i>Следы</span></div></section>
+ <section class="progress-panel"><div class="progress-title"><div><p class="eyebrow">СОСТОЯНИЕ МИРА</p><h2 id="worldHeadline">Экосистема формируется</h2></div><strong id="populationBig">36</strong></div><p id="worldDescription">Наблюдай, кто приспособится к условиям и оставит потомство.</p></section>
+</section>
+<aside class="sidebar">
+ <section class="panel controls"><p class="eyebrow">УПРАВЛЕНИЕ</p><h2>Жизнь продолжается</h2><button id="runBtn" class="primary">▶ Запустить мир</button><div class="button-row"><button id="stepBtn" class="secondary">+ 100 шагов</button><button id="resetBtn" class="secondary">Новый мир ↻</button></div><label class="setting-label" for="speed">Скорость <b id="speedLabel">×4</b></label><input id="speed" type="range" min="1" max="20" value="4"><p class="hint">Ускорение меняет число расчётных шагов, а не скорость анимации.</p></section>
+ <section class="panel stats"><p class="eyebrow">СЕЙЧАС</p><div class="stat-grid"><div><small>Поколение мира</small><b id="generation">1</b></div><div><small>Живые существа</small><b id="alive">36</b></div><div><small>Источники пищи</small><b id="food">105</b></div><div><small>Потомство</small><b id="births">0</b></div></div><div class="population-bars"><div><span>Собиратели</span><b id="foragers">36</b></div><div class="bar"><i id="foragerBar"></i></div><div><span>Хищники</span><b id="hunters">0</b></div><div class="bar hunter"><i id="hunterBar"></i></div></div></section>
+ <section class="panel selected"><p class="eyebrow">ВЫБРАННОЕ СУЩЕСТВО</p><h2 id="creatureName">Никто не выбран</h2><p id="creatureInfo">Нажми на существо в мире, чтобы увидеть его наследуемые признаки.</p><div id="genes" class="gene-list"></div></section>
+ <section class="panel log-panel"><p class="eyebrow">ХРОНИКА</p><h2>События экосистемы</h2><div id="log" class="log"><p class="muted">Здесь появятся события жизни мира.</p></div></section>
+ <p class="disclaimer">Это игровая модель искусственной жизни, а не точная биологическая симуляция. Сложные формы поведения возникают только в пределах заложенных правил.</p>
+</aside></main><script type="module" src="./js/expedition.js"></script></body></html>
