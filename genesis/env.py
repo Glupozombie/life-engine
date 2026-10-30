@@ -113,5 +113,21 @@ class GenesisBipedEnv(gym.Env[np.ndarray, np.ndarray]):
         }
         return self._observation(), float(reward), terminated, truncated, info
 
+
+    def get_render_state(self) -> dict[str, Any]:
+        names = ("pelvis", "torso", "head", "left_thigh", "left_shin", "left_foot", "right_thigh", "right_shin", "right_foot")
+        points = {}
+        for name in names:
+            body_id = self.model.body(name).id
+            position = self.data.xpos[body_id]
+            points[name] = [float(position[0]), float(position[2])]
+        return {
+            "points": points,
+            "root_x": float(self.data.qpos[0]),
+            "root_z": float(0.78 + self.data.qpos[1]),
+            "pitch": float(self.data.qpos[2]),
+            "joint_angles": self.data.qpos[3:10].astype(float).tolist(),
+        }
+
     def close(self) -> None:
         pass
