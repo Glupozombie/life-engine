@@ -99,6 +99,6 @@ async def telemetry_socket(websocket: WebSocket):
     try:
         while True:
             await websocket.send_json(current_snapshot())
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.05)
     except WebSocketDisconnect:
         return
