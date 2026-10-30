@@ -5,9 +5,11 @@ import threading
 from typing import Any
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 app = FastAPI(title="GENESIS telemetry", version="0.1.0")
+app.add_middleware(CORSMiddleware, allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"], allow_credentials=False, allow_methods=["GET", "POST"], allow_headers=["*"])
 _snapshot: dict[str, Any] = {"status": "idle", "step": 0, "brain": None, "body": None}
 _lock = threading.Lock()
 
