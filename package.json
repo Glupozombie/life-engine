@@ -1,7 +1,8 @@
 {
-  "name": "life-engine",
-  "version": "1.0.0",
+  "name": "genesis-embodied-learning",
+  "version": "0.1.0",
   "private": true,
+  "description": "A visible neural controller learning bipedal locomotion in physical simulation",
   "type": "module",
-  "description": "A local browser sandbox for fictional artificial life and evolution"
+  "scripts": {"dev": "vite", "build": "tsc -b && vite build", "preview": "vite preview"}
 }
