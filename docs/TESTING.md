@@ -117,4 +117,4 @@ node --check js/expedition.js
 node --test tests/creature-world.test.js
 ```
 
-Статус на момент записи: код добавлен в ветку; результат GitHub Actions ещё не получен. Браузерный smoke-test не выполнялся. Нельзя считать баланс поведения или визуальную работу подтверждёнными.
+**PASS:** GitHub Actions run [#41023454111](https://github.com/Glupozombie/life-engine/actions/runs/41023454111): синтаксис JS, все node:test, эксперимент среды, целостность ZIP и синтаксис JS в архиве прошли. Браузерный smoke-test не выполнялся. Нельзя считать баланс поведения или визуальную работу подтверждёнными.
