@@ -7,7 +7,7 @@ from genesis.server import publish_snapshot
 
 
 class BrainTelemetryCallback(BaseCallback):
-    def __init__(self, interval: int = 8, weights_interval: int = 64, verbose: int = 0):
+    def __init__(self, interval: int = 2, weights_interval: int = 64, verbose: int = 0):
         super().__init__(verbose)
         self.interval = interval
         self.weights_interval = weights_interval
