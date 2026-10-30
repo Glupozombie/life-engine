@@ -21,6 +21,7 @@ GENESIS — локальная лаборатория воплощённого �
 - `src/App.tsx`, `src/main.tsx`, `src/styles.css` — React интерфейс и Canvas.
 - `package.json`, `requirements.txt`, `pyproject.toml` — зависимости и настройки.
 - `.github/workflows/ci.yml` — Python и frontend CI.
+- Удалены устаревшие JS tests/experiment, ZIP прежнего LIFE ENGINE и workflow проверки архива; они не относились к GENESIS.
 - `tests/test_env.py` — тест среды.
 
 ## Подтверждено локально на Windows 10 (2026-10-30)
