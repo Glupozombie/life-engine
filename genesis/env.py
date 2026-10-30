@@ -126,6 +126,7 @@ class GenesisBipedEnv(gym.Env[np.ndarray, np.ndarray]):
             "root_x": float(self.data.qpos[0]),
             "root_z": float(0.78 + self.data.qpos[1]),
             "pitch": float(self.data.qpos[2]),
+            "forward_velocity": float(self.data.qvel[0]),
             "joint_angles": self.data.qpos[3:10].astype(float).tolist(),
         }
 
