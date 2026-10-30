@@ -24,6 +24,7 @@ function stepOnce(w){
  const r=randomFor(w);w.tick++;
  const alive=w.creatures.filter(c=>c.alive);
  for(const a of alive){
+  if(!a.alive)continue;
   const g=a.genome; a.age++;
   const danger=nearest(a,alive, g.sense*.95,c=>c!==a&&c.genome.aggression>.48&&c.genome.speed>g.speed*.82);
   const prey=nearest(a,alive,g.sense*.8,c=>c!==a&&c.genome.aggression<.42&&c.energy<g.speed*30);
@@ -51,4 +52,4 @@ function stepOnce(w){
  w.events=w.events.slice(0,8);
  if(w.creatures.length>POPULATION_LIMIT*1.5)w.creatures=w.creatures.filter(c=>c.alive).slice(-POPULATION_LIMIT);
 }
-export function getWorldStats(w){const alive=w.creatures.filter(c=>c.alive);return {population:alive.length,food:w.food.length,generation:w.generation,births:w.creatures.reduce((s,c)=>s+c.births,0),kills:w.creatures.reduce((s,c)=>s+c.kills,0),avgEnergy:alive.length?alive.reduce((s,c)=>s+c.energy,0)/alive.length:0,foragers:alive.filter(c=>c.genome.aggression<.42).length,hunters:alive.filter(c=>c.genome.aggression>.52).length};}
+export function getWorldStats(w){const alive=w.creatures.filter(c=>c.alive);return {population:alive.length,food:w.food.length,generation:w.generation,births:w.creatures.reduce((s,c)=>s+c.births,0),kills:w.creatures.reduce((s,c)=>s+c.kills,0),avgEnergy:alive.length?alive.reduce((s,c)=>s+c.energy,0)/alive.length:0,foragers:alive.filter(c=>c.genome.aggression<=.52).length,hunters:alive.filter(c=>c.genome.aggression>.52).length};}
